@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APICarmel.Data;
 using APICarmel.Models;
+using APICarmel.Repository;
+using APICarmel.Models.Dto;
 
 namespace APICarmel.Controllers
 {
@@ -14,95 +16,133 @@ namespace APICarmel.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
+        private readonly IMemberRepository _memberRepository;
+        protected ResponseDto _response;
 
-        public MembersController(ApplicationDbContext context)
+        //public MembersController(ApplicationDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        public MembersController(IMemberRepository memberRepository)
         {
-            _context = context;
+            _memberRepository = memberRepository;
+            _response = new ResponseDto();
         }
 
         // GET: api/Members
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Members>>> GetMembers()
         {
-            return await _context.Members.ToListAsync();
+            try
+            {
+                var lista = await _memberRepository.GetMembers();
+                _response.Result = lista;
+                _response.DisplayMessage = "Lista de Miembros";
+            }
+            catch (Exception ex)
+            {
+                _response.isSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString()};
+            }
+            return Ok(_response);
+            //return await _context.Members.ToListAsync();
         }
 
         // GET: api/Members/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Members>> GetMembers(int id)
         {
-            var members = await _context.Members.FindAsync(id);
+            var member = await _memberRepository.GetMemberById(id);
 
-            if (members == null)
+            if (member == null)
             {
-                return NotFound();
+                _response.isSuccess = false;
+                _response.DisplayMessage = "Miembro no existe";
+                return NotFound(_response);
             }
+            _response.Result = member;
+            _response.DisplayMessage = "Informacion del miembro";
 
-            return members;
+            return Ok(_response);
         }
 
         // PUT: api/Members/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMembers(int id, Members members)
+        public async Task<IActionResult> PutMembers(int id, MemberDto memberDto)
         {
-            if (id != members.IdMember)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(members).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                _response.Result = model;
+                return Ok(_response);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!MembersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                _response.isSuccess = false;
+                _response.DisplayMessage = "Error al actualizar el registro";
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
             }
-
-            return NoContent();
         }
 
         // POST: api/Members
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Members>> PostMembers(Members members)
+        public async Task<ActionResult<Members>> PostMembers(MemberDto memberDto)
         {
-            _context.Members.Add(members);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMembers", new { id = members.IdMember }, members);
+            try
+            {
+                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                _response.Result = model;
+                return CreatedAtAction("GetMember", new { id = model.IdMember }, _response);
+            }
+            catch (Exception ex)
+            {
+                _response.isSuccess = false;
+                _response.DisplayMessage = "Error al grabar el registro";
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
+            }
         }
+
 
         // DELETE: api/Members/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMembers(int id)
         {
-            var members = await _context.Members.FindAsync(id);
-            if (members == null)
+            try
             {
-                return NotFound();
+                bool isDelete = await _memberRepository.DeleteMember(id);
+                if (isDelete)
+                {
+                    _response.Result = isDelete;
+                    _response.DisplayMessage = "Miembro eliminado con exito";
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.isSuccess = false;
+                    _response.DisplayMessage = "Error al eliminar el miembro";
+                    return BadRequest(_response);
+                }
             }
+            catch (Exception ex)
+            {
 
-            _context.Members.Remove(members);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                _response.isSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            return BadRequest(_response);
+            }
         }
+    
 
-        private bool MembersExists(int id)
-        {
-            return _context.Members.Any(e => e.IdMember == id);
-        }
+        //private bool MembersExists(int id)
+        //{
+        //    return _context.Members.Any(e => e.IdMember == id);
+        //}
     }
 }
