@@ -23,6 +23,9 @@ namespace APICarmel
                 config.CreateMap<GeneralContributionDto, GeneralContributions>();
                 config.CreateMap<GeneralContributions, GeneralContributionDto>();
 
+                config.CreateMap<PersonalContributionDto, PersonalContributions>();
+                config.CreateMap<PersonalContributions, PersonalContributionDto>();
+
             });
 
             return mappingConfig;
