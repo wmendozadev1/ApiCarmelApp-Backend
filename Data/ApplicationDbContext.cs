@@ -17,6 +17,7 @@ namespace APICarmel.Data
         public DbSet<GeneralContributions> GeneralContributions { get; set; }
         public DbSet<PersonalContributions> PersonalContributions { get; set; }
         public DbSet<Vacancies> Vacancies { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
