@@ -16,6 +16,10 @@ namespace APICarmel
             {
                 config.CreateMap<MemberDto, Members>();
                 config.CreateMap<Members,MemberDto>();
+                
+                config.CreateMap<VacancieDto, Vacancies>();
+                config.CreateMap<Vacancies, VacancieDto>();
+
             });
 
             return mappingConfig;

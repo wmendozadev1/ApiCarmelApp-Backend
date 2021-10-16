@@ -67,6 +67,7 @@ namespace APICarmel
 
             services.AddScoped<IMemberRepository,MemberRepository>();
             services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IVacancieRepository,VacancieRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=> 
                                         {
