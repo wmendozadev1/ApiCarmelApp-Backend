@@ -20,6 +20,9 @@ namespace APICarmel
                 config.CreateMap<VacancieDto, Vacancies>();
                 config.CreateMap<Vacancies, VacancieDto>();
 
+                config.CreateMap<GeneralContributionDto, GeneralContributions>();
+                config.CreateMap<GeneralContributions, GeneralContributionDto>();
+
             });
 
             return mappingConfig;
