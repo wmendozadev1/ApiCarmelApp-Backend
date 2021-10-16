@@ -140,3 +140,4 @@ E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Microsoft.Extensions.DependencyM
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Scrutor.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+E:\proyectos\netcore\APICarmel\obj\Debug\net5.0\APICarmel.csproj.AssemblyReference.cache
