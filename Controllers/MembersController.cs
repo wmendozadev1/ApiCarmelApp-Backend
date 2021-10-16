@@ -9,11 +9,13 @@ using APICarmel.Data;
 using APICarmel.Models;
 using APICarmel.Repository;
 using APICarmel.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APICarmel.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         //private readonly ApplicationDbContext _context;
@@ -33,6 +35,7 @@ namespace APICarmel.Controllers
 
         // GET: api/Members
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Members>>> GetMembers()
         {
             try

@@ -43,7 +43,6 @@ E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\runtimes\win-x86\native\Microsof
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-E:\proyectos\netcore\APICarmel\obj\Debug\net5.0\APICarmel.csproj.AssemblyReference.cache
 E:\proyectos\netcore\APICarmel\obj\Debug\net5.0\APICarmel.GeneratedMSBuildEditorConfig.editorconfig
 E:\proyectos\netcore\APICarmel\obj\Debug\net5.0\APICarmel.AssemblyInfoInputs.cache
 E:\proyectos\netcore\APICarmel\obj\Debug\net5.0\APICarmel.AssemblyInfo.cs
@@ -137,3 +136,7 @@ E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\AutoMapper.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Swashbuckle.AspNetCore.Annotations.dll
+E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Microsoft.Extensions.DependencyModel.dll
+E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Scrutor.dll
+E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.dll
+E:\proyectos\netcore\APICarmel\bin\Debug\net5.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
