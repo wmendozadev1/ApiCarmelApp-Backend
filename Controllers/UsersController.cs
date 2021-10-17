@@ -31,23 +31,27 @@ namespace APICarmel.Controllers
                 new User
                 {
                     UserName = userDto.UserName
-                },userDto.Password) ;
+                }, userDto.Password);
 
-            if (res==-1)
+            if (res == "existe")
             {
                 _response.isSuccess = false;
                 _response.DisplayMessage = "Usuario ya existe";
                 return BadRequest(_response);
             }
 
-            if (res==-500)
+            if (res == "error")
             {
                 _response.isSuccess = false;
                 _response.DisplayMessage = "Error al crear usuario";
                 return BadRequest(_response);
             }
             _response.DisplayMessage = "Usuario creado con exito";
-            _response.Result = res;
+            //_response.Result = res;
+            JwTPackage jtp = new JwTPackage();
+            jtp.UserName = userDto.UserName;
+            jtp.Token = res;
+            _response.Result = jtp;
 
             return Ok(_response);
 
@@ -57,29 +61,39 @@ namespace APICarmel.Controllers
         public async Task<ActionResult> Login(UserDto user)
         {
             var respuesta = await _userRepository.Login(user.UserName, user.Password);
-            if (respuesta=="nouser")
+            if (respuesta == "nouser")
             {
                 _response.isSuccess = false;
                 _response.DisplayMessage = "Usuario no existe";
                 return BadRequest(_response);
             }
-            if (respuesta=="wrongpassword")
+            if (respuesta == "wrongpassword")
             {
                 _response.isSuccess = false;
                 _response.DisplayMessage = "Password incorrecta";
                 return BadRequest(_response);
             }
 
-            _response.Result = respuesta;
+            //_response.Result = respuesta;
+
+            JwTPackage jtp = new JwTPackage();
+            jtp.UserName = user.UserName;
+            jtp.Token = respuesta;
+            _response.Result = jtp;
             _response.DisplayMessage = "Usuario conectado";
 
             return Ok(_response);
 
-
         }
-
-      
 
 
     }
+
+    public class JwTPackage
+    {
+        public string UserName { get; set; }
+        public string Token { get; set; }
+    }
+
+
 }

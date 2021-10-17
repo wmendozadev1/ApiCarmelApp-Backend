@@ -40,13 +40,13 @@ namespace APICarmel.Repository
             }
         }
 
-        public async Task<int> Register(User user, string password)
+        public async Task<string> Register(User user, string password)
         {
             try
             {
                 if( await UserExists(user.UserName))
                 {
-                    return -1;
+                    return "existe";
                 }
                 createPasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt );
 
@@ -55,12 +55,11 @@ namespace APICarmel.Repository
 
                 await _db.Users.AddAsync(user);
                 await _db.SaveChangesAsync();
-                return user.IdUser;
+                return createToken(user);
             }
             catch (Exception ex)
             {
-
-                return -500;
+                return "error";
             }
         }
 
