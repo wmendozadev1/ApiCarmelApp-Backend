@@ -9,76 +9,68 @@ using APICarmel.Data;
 using APICarmel.Models;
 using APICarmel.Repository;
 using APICarmel.Models.Dto;
-using Microsoft.AspNetCore.Authorization;
 
 namespace APICarmel.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class MembersController : ControllerBase
+    public class GeneralContributionsController : ControllerBase
     {
-        //private readonly ApplicationDbContext _context;
-        private readonly IMemberRepository _memberRepository;
+        private readonly IGeneralContributionRepository _generalcontribRepository;
         protected ResponseDto _response;
 
-        //public MembersController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
-
-        public MembersController(IMemberRepository memberRepository)
+        public GeneralContributionsController(IGeneralContributionRepository generalcontribRepository)
         {
-            _memberRepository = memberRepository;
+            _generalcontribRepository = generalcontribRepository;
             _response = new ResponseDto();
         }
 
-        // GET: api/Members
+
+        // GET: api/GeneralContributions
         [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<Members>>> GetMembers()
+        public async Task<ActionResult<IEnumerable<GeneralContributions>>> GetGeneralContributions()
         {
             try
             {
-                var lista = await _memberRepository.GetMembers();
+                var lista = await _generalcontribRepository.GetGeneralContributions();
                 _response.Result = lista;
-                _response.DisplayMessage = "Lista de Miembros";
+                _response.DisplayMessage = "Lista de Contribuciones generales";
             }
             catch (Exception ex)
             {
+
                 _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString()};
+                _response.ErrorMessages = new List<string> { ex.ToString() };
             }
             return Ok(_response);
-            //return await _context.Members.ToListAsync();
         }
 
-        // GET: api/Members/5
+        // GET: api/GeneralContributions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Members>> GetMembers(int id)
+        public async Task<ActionResult<GeneralContributions>> GetGeneralContributions(int id)
         {
-            var member = await _memberRepository.GetMemberById(id);
+            var generalcontrib = await _generalcontribRepository.GetGeneralContributionById(id);
 
-            if (member == null)
+            if (generalcontrib == null)
             {
                 _response.isSuccess = false;
-                _response.DisplayMessage = "Miembro no existe";
+                _response.DisplayMessage = "La contribución general no existe";
                 return NotFound(_response);
             }
-            _response.Result = member;
-            _response.DisplayMessage = "Informacion del miembro";
+            _response.Result = generalcontrib;
+            _response.DisplayMessage = "Información de contribución general";
 
             return Ok(_response);
         }
 
-        // PUT: api/Members/5
+        // PUT: api/GeneralContributions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMembers(int id, MemberDto memberDto)
+        public async Task<IActionResult> PutGeneralContributions(int id, GeneralContributionDto generalContributiondto)
         {
             try
             {
-                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                GeneralContributionDto model = await _generalcontribRepository.CreateUpdate(generalContributiondto);
                 _response.Result = model;
                 return Ok(_response);
             }
@@ -91,17 +83,16 @@ namespace APICarmel.Controllers
             }
         }
 
-        // POST: api/Members
+        // POST: api/GeneralContributions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Members>> PostMembers(MemberDto memberDto)
+        public async Task<ActionResult<GeneralContributions>> PostGeneralContributions(GeneralContributionDto generalContributiondto)
         {
-
             try
             {
-                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                GeneralContributionDto model = await _generalcontribRepository.CreateUpdate(generalContributiondto);
                 _response.Result = model;
-                return CreatedAtAction("GetMembers", new { id = model.IdMember }, _response);
+                return CreatedAtAction("GetGeneralContributions", new { id = model.IdContribution }, _response);
             }
             catch (Exception ex)
             {
@@ -110,26 +101,27 @@ namespace APICarmel.Controllers
                 _response.ErrorMessages = new List<string> { ex.ToString() };
                 return BadRequest(_response);
             }
+
+            //return CreatedAtAction("GetGeneralContributions", new { id = generalContributions.IdContribution }, generalContributions);
         }
 
-
-        // DELETE: api/Members/5
+        // DELETE: api/GeneralContributions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMembers(int id)
+        public async Task<IActionResult> DeleteGeneralContributions(int id)
         {
             try
             {
-                bool isDelete = await _memberRepository.DeleteMember(id);
+                bool isDelete = await _generalcontribRepository.DeleteGeneralContribution(id);
                 if (isDelete)
                 {
                     _response.Result = isDelete;
-                    _response.DisplayMessage = "Miembro eliminado con exito";
+                    _response.DisplayMessage = "Contribución general eliminada con éxito";
                     return Ok(_response);
                 }
                 else
                 {
                     _response.isSuccess = false;
-                    _response.DisplayMessage = "Error al eliminar el miembro";
+                    _response.DisplayMessage = "Error al eliminar el Contribución general";
                     return BadRequest(_response);
                 }
             }
@@ -138,14 +130,13 @@ namespace APICarmel.Controllers
 
                 _response.isSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
-            return BadRequest(_response);
+                return BadRequest(_response);
             }
         }
-    
 
-        //private bool MembersExists(int id)
+        //private bool GeneralContributionsExists(int id)
         //{
-        //    return _context.Members.Any(e => e.IdMember == id);
+        //    return _context.GeneralContributions.Any(e => e.IdContribution == id);
         //}
     }
 }

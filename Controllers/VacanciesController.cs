@@ -15,70 +15,69 @@ namespace APICarmel.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class MembersController : ControllerBase
+    public class VacanciesController : ControllerBase
     {
         //private readonly ApplicationDbContext _context;
-        private readonly IMemberRepository _memberRepository;
+        private readonly IVacancieRepository _vacancieRepository;
         protected ResponseDto _response;
 
-        //public MembersController(ApplicationDbContext context)
+        //public VacanciesController(ApplicationDbContext context)
         //{
         //    _context = context;
         //}
 
-        public MembersController(IMemberRepository memberRepository)
+        public VacanciesController(IVacancieRepository vacancieRepository)
         {
-            _memberRepository = memberRepository;
+            _vacancieRepository = vacancieRepository;
             _response = new ResponseDto();
         }
 
-        // GET: api/Members
+        // GET: api/Vacancies
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Members>>> GetMembers()
+        public async Task<ActionResult<IEnumerable<Vacancies>>> GetVacancies()
         {
             try
             {
-                var lista = await _memberRepository.GetMembers();
+                var lista = await _vacancieRepository.GetVacancies();
                 _response.Result = lista;
-                _response.DisplayMessage = "Lista de Miembros";
+                _response.DisplayMessage = "Lista de Servicios AA";
             }
             catch (Exception ex)
             {
+
                 _response.isSuccess = false;
-                _response.ErrorMessages = new List<string> { ex.ToString()};
+                _response.ErrorMessages = new List<string> { ex.ToString() };
             }
             return Ok(_response);
-            //return await _context.Members.ToListAsync();
         }
 
-        // GET: api/Members/5
+        // GET: api/Vacancies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Members>> GetMembers(int id)
+        public async Task<ActionResult<Vacancies>> GetVacancies(int id)
         {
-            var member = await _memberRepository.GetMemberById(id);
+            var vacancie = await _vacancieRepository.GetVacancieById(id);
 
-            if (member == null)
+            if (vacancie == null)
             {
                 _response.isSuccess = false;
-                _response.DisplayMessage = "Miembro no existe";
+                _response.DisplayMessage = "El servicio no existe";
                 return NotFound(_response);
             }
-            _response.Result = member;
-            _response.DisplayMessage = "Informacion del miembro";
+            _response.Result = vacancie;
+            _response.DisplayMessage = "Información del servicio";
 
             return Ok(_response);
         }
 
-        // PUT: api/Members/5
+        // PUT: api/Vacancies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMembers(int id, MemberDto memberDto)
+        public async Task<IActionResult> PutVacancies(int id, VacancieDto vacanciedto)
         {
             try
             {
-                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                VacancieDto model = await _vacancieRepository.CreateUpdate(vacanciedto);
                 _response.Result = model;
                 return Ok(_response);
             }
@@ -91,17 +90,16 @@ namespace APICarmel.Controllers
             }
         }
 
-        // POST: api/Members
+        // POST: api/Vacancies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Members>> PostMembers(MemberDto memberDto)
+        public async Task<ActionResult<Vacancies>> PostVacancies(VacancieDto vacanciedto)
         {
-
             try
             {
-                MemberDto model = await _memberRepository.CreateUpdate(memberDto);
+                VacancieDto model = await _vacancieRepository.CreateUpdate(vacanciedto);
                 _response.Result = model;
-                return CreatedAtAction("GetMembers", new { id = model.IdMember }, _response);
+                return CreatedAtAction("GetVacancies", new { id = model.IdVacancie }, _response);
             }
             catch (Exception ex)
             {
@@ -112,24 +110,23 @@ namespace APICarmel.Controllers
             }
         }
 
-
-        // DELETE: api/Members/5
+        // DELETE: api/Vacancies/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMembers(int id)
+        public async Task<IActionResult> DeleteVacancies(int id)
         {
             try
             {
-                bool isDelete = await _memberRepository.DeleteMember(id);
+                bool isDelete = await _vacancieRepository.DeleteVacancie(id);
                 if (isDelete)
                 {
                     _response.Result = isDelete;
-                    _response.DisplayMessage = "Miembro eliminado con exito";
+                    _response.DisplayMessage = "Servicio eliminado con éxito";
                     return Ok(_response);
                 }
                 else
                 {
                     _response.isSuccess = false;
-                    _response.DisplayMessage = "Error al eliminar el miembro";
+                    _response.DisplayMessage = "Error al eliminar el servicio";
                     return BadRequest(_response);
                 }
             }
@@ -138,14 +135,13 @@ namespace APICarmel.Controllers
 
                 _response.isSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
-            return BadRequest(_response);
+                return BadRequest(_response);
             }
         }
-    
 
-        //private bool MembersExists(int id)
+        //private bool VacanciesExists(int id)
         //{
-        //    return _context.Members.Any(e => e.IdMember == id);
+        //    return _context.Vacancies.Any(e => e.IdVacancie == id);
         //}
     }
 }
